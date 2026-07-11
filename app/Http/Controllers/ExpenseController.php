@@ -7,10 +7,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreExpenseRequest;
 use App\http\Requests\UpdateExpenseRequest;
 use App\Http\Resources\ExpenseResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ExpenseController extends Controller
 {
-    public function index(Request $request) 
+    /**
+     * Display a listing of the authenticated user's expenses with optional filters.
+     */
+    public function index(Request $request): AnonymousResourceCollection 
     {
         $query = $request->user()->expenses()->with('category');
 
@@ -34,7 +39,10 @@ class ExpenseController extends Controller
         return ExpenseResource::collection($expenses);
     }
 
-    public function store(StoreExpenseRequest $request) 
+    /**
+     * Store a newly created expense in storage.
+     */
+    public function store(StoreExpenseRequest $request): ExpenseResource
     {
         $expense = $request->user()->expenses()->create([
             'category_id' => $request->category_id,
@@ -46,8 +54,11 @@ class ExpenseController extends Controller
         return new ExpenseResource($expense->load('category'));
     }
 
-    public function update(UpdateExpenseRequest $request, Expense $expense)
-    {
+    /**
+     * Update the specified expense in storage.
+     */
+    public function update(UpdateExpenseRequest $request, Expense $expense): ExpenseResource|JsonResponse
+    {   
         if ($expense->user_id !== $request->user()->id)
             {
                 return response()->json(['message' => 'Forbidden'], 403);
@@ -63,7 +74,10 @@ class ExpenseController extends Controller
         return new ExpenseResource($expense->load('category'));
     }
 
-    public function destroy(Request $request, Expense $expense) 
+    /**
+     * Remove the specified expense from storage.
+     */
+    public function destroy(Request $request, Expense $expense): JsonResponse
     {
         if ($expense->user_id !== $request->user()->id)
            {
@@ -75,7 +89,10 @@ class ExpenseController extends Controller
         return response()->json(['message' => 'Deleted']);
     }
 
-    public function summary(Request $request)
+    /**
+     * Return a summary of expenses grouped by month.
+     */
+    public function summary(Request $request): JsonResponse
     {
         $sumarry = $request->user()->expenses()
             ->selectRaw('DATE_FORMAT(date, "%Y-%m") as month, SUM(amount) as total')

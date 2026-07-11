@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) 
+    /**
+     * Register a new user and return an auth token.
+     */
+    public function register(Request $request): JsonResponse
     {
         $user = User::create([
             'name' => $request->name,
@@ -24,7 +28,10 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function login(Request $request) 
+    /**
+     * Authenticate a user and return an auth token.
+     */
+    public function login(Request $request): JsonResponse
     {
         $user = User::where('email', $request->email)->first();
 
@@ -41,7 +48,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request) 
+    /**
+     * Revoke the current user's auth token.
+     */
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
 

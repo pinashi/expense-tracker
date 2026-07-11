@@ -6,17 +6,25 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Display a listing of the authenticated user's categories.
+     */
+    public function index(Request $request): AnonymousResourceCollection
     {
         $categories = $request->user()->categories;
 
         return CategoryResource::collection($categories);
     }
 
-    public function store(StoreCategoryRequest $request) 
+    /**
+     * Store a newly created category in storage.
+     */
+    public function store(StoreCategoryRequest $request): CategoryResource
     {
         $category = $request->user()->categories()->create([
             'name' => $request->name,
@@ -25,7 +33,10 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    public function destroy(Request $request, Category $category) 
+    /**
+     * Remove the specified category from storage.
+     */
+    public function destroy(Request $request, Category $category): JsonResponse
     {
         if ($category->user_id !== $request->user()->id) 
             {

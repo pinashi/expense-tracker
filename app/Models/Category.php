@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * An expense category belonging to a user.
+ */
 class Category extends Model
 {
     protected $fillable = ['user_id', 'name'];
