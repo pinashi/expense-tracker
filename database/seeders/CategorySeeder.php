@@ -19,7 +19,7 @@ class CategorySeeder extends Seeder
             {
                 Category::create([
                     'user_id' => 1,
-                    'name' => $name,
+                    'name'    => $name,
                 ]);
             }
     }

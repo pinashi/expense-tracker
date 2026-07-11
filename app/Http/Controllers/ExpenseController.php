@@ -43,7 +43,7 @@ class ExpenseController extends Controller
             'date'        => $request->date,
         ]);
 
-        return new ExpenseResource($expense);
+        return new ExpenseResource($expense->load('category'));
     }
 
     public function update(UpdateExpenseRequest $request, Expense $expense)

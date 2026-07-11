@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/categories',              [CategoryController::class, 'store']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
-    Route::get('/expenses/summary',               [ExpenseController::class, 'summary']);
+    Route::get('/expenses/summary',      [ExpenseController::class, 'summary']);
     Route::get('/expenses',              [ExpenseController::class, 'index']);
     Route::post('/expenses',             [ExpenseController::class, 'store']);
     Route::put('/expenses/{expense}',    [ExpenseController::class, 'update']);
